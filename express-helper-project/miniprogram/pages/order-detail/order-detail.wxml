@@ -1,0 +1,89 @@
+<view class="page">
+  <view class="container">
+    <view class="order-card">
+      <view class="card-header">
+        <view class="station">{{order.stationName}}</view>
+        <view class="status-tag" wx:if="{{order.status === 'PENDING_GRAB'}}">待抢单</view>
+        <view class="status-tag status-grabbed" wx:elif="{{order.status === 'GRABBED'}}">待取件</view>
+        <view class="status-tag status-picked" wx:elif="{{order.status === 'PICKED_UP' || order.status === 'DELIVERING'}}">待配送</view>
+        <view class="status-tag status-completed" wx:elif="{{order.status === 'COMPLETED'}}">已完成</view>
+        <view class="status-tag status-cancelled" wx:else>已取消</view>
+      </view>
+
+      <view class="section">
+        <view class="section-title">基本信息</view>
+        <view class="info-row">
+          <view class="info-label">快递公司</view>
+          <view class="info-value">{{order.expressCompany}}</view>
+        </view>
+        <view class="info-row">
+          <view class="info-label">快递类型</view>
+          <view class="info-value">{{order.expressType}}</view>
+        </view>
+      </view>
+
+      <view class="section">
+        <view class="section-title">取件信息</view>
+        <view class="info-row">
+          <view class="info-label">取件站点</view>
+          <view class="info-value">{{order.stationName}}</view>
+        </view>
+        <view class="info-row">
+          <view class="info-label">取件码</view>
+          <view class="info-value code-value">{{order.pickupCode}}</view>
+        </view>
+        <view class="info-row">
+          <view class="info-label">快递单号</view>
+          <view class="info-value">{{order.expressNo}}</view>
+        </view>
+        <view class="info-row">
+          <view class="info-label">送达时间</view>
+          <view class="info-value">{{order.pickupTimeRange}}</view>
+        </view>
+        <view class="info-row">
+          <view class="info-label">送达地点</view>
+          <view class="info-value">{{order.deliveryLocation}}</view>
+        </view>
+        <view class="info-row" wx:if="{{order.contactPhone}}">
+          <view class="info-label">联系方式</view>
+          <view class="info-value">{{order.contactPhone}}</view>
+        </view>
+      </view>
+
+      <view class="section" wx:if="{{order.remark}}">
+        <view class="section-title">备注</view>
+        <view class="remark-text">{{order.remark}}</view>
+      </view>
+
+      <view class="fee-section">
+        <view class="fee-label">代取费用</view>
+        <view class="fee-value">¥{{order.fee}}</view>
+      </view>
+    </view>
+
+    <button wx:if="{{canGrab && order.publisherId !== userId && order.status === 'PENDING_GRAB'}}" 
+            class="grab-btn" 
+            data-id="{{order.id}}" 
+            bindtap="grab">立即抢单</button>
+
+    <button wx:if="{{order.courierId === userId && order.status === 'GRABBED'}}"
+            class="grab-btn"
+            data-id="{{order.id}}"
+            bindtap="markPicked">确认取件</button>
+
+    <button wx:if="{{order.courierId === userId && (order.status === 'PICKED_UP' || order.status === 'DELIVERING')}}"
+            class="confirm-receive-btn"
+            data-id="{{order.id}}"
+            bindtap="finishTask">完成订单</button>
+    
+    <button wx:if="{{order.publisherId === userId && order.status === 'DELIVERING'}}" 
+            class="confirm-receive-btn" 
+            data-id="{{order.id}}" 
+            bindtap="confirmReceive">确认收货</button>
+    
+    <button wx:if="{{order.publisherId === userId && order.status === 'COMPLETED' && order.hasReview !== 1}}" 
+            class="review-btn" 
+            data-id="{{order.id}}" 
+            bindtap="goToReview">评价订单</button>
+  </view>
+</view>

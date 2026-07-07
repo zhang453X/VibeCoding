@@ -1,0 +1,35 @@
+<view class="page">
+  <view class="content">
+    <view class="hero-card">
+      <view class="hero-title">关于我们</view>
+      <view class="hero-name">{{appName}}</view>
+      <view class="hero-intro">{{intro}}</view>
+    </view>
+
+    <view class="info-card">
+      <view class="section-title">联系方式</view>
+
+      <view class="info-item" bindtap="copyEmail">
+        <view class="info-left">
+          <view class="info-icon">邮</view>
+          <view>
+            <view class="info-label">联系邮箱</view>
+            <view class="info-value">{{email}}</view>
+          </view>
+        </view>
+        <text class="info-action">复制</text>
+      </view>
+
+      <view class="info-item" bindtap="callPhone">
+        <view class="info-left">
+          <view class="info-icon">电</view>
+          <view>
+            <view class="info-label">联系电话</view>
+            <view class="info-value">{{phone}}</view>
+          </view>
+        </view>
+        <text class="info-action">拨打</text>
+      </view>
+    </view>
+  </view>
+</view>

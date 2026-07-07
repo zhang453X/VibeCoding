@@ -1,0 +1,44 @@
+<view class="page">
+  <view class="panel">
+    <view class="section-title">校园快递互助</view>
+    <view class="section-desc">注册账号</view>
+
+    <view class="form-grid">
+      <view class="field-card">
+        <input class="field-input" placeholder="学号" data-key="studentNo" bindinput="setField" value="{{form.studentNo}}" />
+      </view>
+
+      <view class="field-card">
+        <input class="field-input" placeholder="用户名（可选）" data-key="username" bindinput="setField" value="{{form.username}}" />
+      </view>
+
+      <view class="field-card">
+        <input class="field-input" placeholder="昵称" data-key="nickname" bindinput="setField" value="{{form.nickname}}" />
+      </view>
+
+      <view class="field-card">
+        <input class="field-input" type="number" maxlength="11" placeholder="手机号" data-key="phone" bindinput="setField" value="{{form.phone}}" />
+      </view>
+
+      <view class="field-card">
+        <input class="field-input" password placeholder="密码" data-key="password" bindinput="setField" value="{{form.password}}" />
+      </view>
+
+      <view class="field-card">
+        <input class="field-input" password placeholder="确认密码" data-key="confirmPassword" bindinput="setField" value="{{form.confirmPassword}}" />
+      </view>
+    </view>
+
+    <view class="rule-card" bindtap="toggleAgree">
+      <view class="rule-check {{agree ? 'checked' : ''}}">{{agree ? '√' : ''}}</view>
+      <view class="rule-text">我已知晓平台注册与使用规则</view>
+    </view>
+
+    <button class="primary-btn" loading="{{loading}}" disabled="{{loading}}" bindtap="submit">注册账号</button>
+  </view>
+
+  <view class="bottom-bar">
+    <text class="bottom-text">已有账号？</text>
+    <text class="bottom-link" bindtap="toLogin">返回登录</text>
+  </view>
+</view>

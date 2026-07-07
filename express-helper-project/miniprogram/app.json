@@ -1,0 +1,70 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/register/register",
+    "pages/index/index",
+    "pages/order/order",
+    "pages/messages/messages",
+    "pages/profile/profile",
+    "pages/my-orders/my-orders",
+    "pages/auth/auth",
+    "pages/edit-profile/edit-profile",
+    "pages/change-password/change-password",
+    "pages/publish-history/publish-history",
+    "pages/publish-order/publish-order",
+    "pages/order-detail/order-detail",
+    "pages/credit-record/credit-record",
+    "pages/order-review/order-review",
+    "pages/review/review",
+    "pages/help/help",
+    "pages/about/about",
+    "pages/address/address",
+    "pages/station-detail/station-detail",
+    "pages/address-book/address-book",
+    "pages/address-edit/address-edit"
+  ],
+  "tabBar": {
+    "color": "#737373",
+    "selectedColor": "#3B82F6",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "text": "任务",
+        "iconPath": "images/orders.png",
+        "selectedIconPath": "images/orders-active.png"
+      },
+      {
+        "pagePath": "pages/publish-order/publish-order",
+        "text": "发布",
+        "iconPath": "images/publish.png",
+        "selectedIconPath": "images/publish-active.png"
+      },
+      {
+        "pagePath": "pages/my-orders/my-orders",
+        "text": "订单",
+        "iconPath": "images/dd.png",
+        "selectedIconPath": "images/dd-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/profile.png",
+        "selectedIconPath": "images/profile-active.png"
+      }
+    ]
+  },
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

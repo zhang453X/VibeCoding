@@ -1,0 +1,164 @@
+<view class="page-container">
+  <view class="header">
+    <view class="header-safe" style="height: {{statusBarHeight}}px;"></view>
+    <view class="header-content">
+      <view class="header-actions">
+        <view class="icon-btn message-btn" bindtap="goToMessages">
+          <image class="action-image" src="../../images/messages.png" mode="aspectFit"></image>
+          <view wx:if="{{hasUnreadNotice}}" class="message-dot"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <scroll-view
+    class="page-content"
+    scroll-y="true"
+    scroll-into-view="{{scrollTarget}}"
+    refresher-enabled="{{true}}"
+    bindrefresherrefresh="onRefresh"
+    refresher-triggered="{{refreshing}}"
+  >
+    <view class="hero-card">
+      <swiper
+        class="hero-swiper"
+        autoplay="{{true}}"
+        circular="{{true}}"
+        interval="{{5200}}"
+        duration="{{500}}"
+        current="{{currentHeroIndex}}"
+        bindchange="onHeroChange"
+      >
+        <block wx:for="{{heroBanners}}" wx:key="id">
+          <swiper-item>
+            <view class="hero-slide" data-action="{{item.action}}" bindtap="onHeroTap">
+              <image class="hero-image" src="{{item.image}}" mode="aspectFill" />
+              <view wx:if="{{item.showOverlay}}" class="hero-mask"></view>
+              <view wx:if="{{item.showOverlay}}" class="hero-content">
+                <text class="hero-title">{{item.title}}</text>
+                <text class="hero-subtitle">{{item.subtitle}}</text>
+                <view class="hero-actions">
+                  <view class="hero-btn hero-btn-primary">
+                    <text>立即体验</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </swiper-item>
+        </block>
+      </swiper>
+      <view class="hero-dots">
+        <block wx:for="{{heroBanners}}" wx:key="id">
+          <view class="dot {{currentHeroIndex === index ? 'active' : ''}}"></view>
+        </block>
+      </view>
+    </view>
+
+    <view class="feature-grid">
+      <view class="feature-item" bindtap="goToPublish">
+        <image class="feature-image" src="../../images/kddq.png" mode="aspectFit"></image>
+        <text class="feature-name">发布代取</text>
+      </view>
+      <view class="feature-item" bindtap="scrollToTasks">
+        <image class="feature-image" src="../../images/search.png" mode="aspectFit"></image>
+        <text class="feature-name">查找代取</text>
+      </view>
+      <view class="feature-item" bindtap="goToMyOrders">
+        <image class="feature-image" src="../../images/wddd.png" mode="aspectFit"></image>
+        <text class="feature-name">我的订单</text>
+      </view>
+      <view class="feature-item" bindtap="goToAddress">
+        <image class="feature-image" src="../../images/快递点.png" mode="aspectFit"></image>
+        <text class="feature-name">快递点</text>
+      </view>
+    </view>
+
+    <view class="quick-banner" bindtap="quickPublish">
+      <view class="quick-banner-icon">+</view>
+      <view class="quick-banner-main">
+        <text class="quick-banner-title">快速发布代取需求</text>
+        <text class="quick-banner-desc">填写快递信息后即可进入大厅</text>
+      </view>
+      <text class="quick-banner-arrow">></text>
+    </view>
+
+    <view wx:if="{{authTip}}" class="tip-card">
+      <text class="tip-title">抢单权限提示</text>
+      <text class="tip-content">{{authTip}}</text>
+    </view>
+
+    <view id="taskSection" class="task-section">
+      <view class="category-tabs-wrapper">
+        <scroll-view scroll-x="true" class="category-tabs">
+          <block wx:for="{{categoryOptions}}" wx:key="value">
+            <view
+              class="category-tab {{currentCategory === item.value ? 'active' : ''}}"
+              data-cat="{{item.value}}"
+              bindtap="switchCategory"
+            >
+              {{item.label}}
+            </view>
+          </block>
+        </scroll-view>
+      </view>
+
+      <view class="task-list-wrapper">
+        <view class="task-list-header">
+          <view>
+            <text class="task-list-title">最新任务</text>
+            <text class="task-list-count">当前 {{filteredOrders.length}} 条可接单任务</text>
+          </view>
+          <text class="view-more" bindtap="goToOrders">查看管理</text>
+        </view>
+
+        <view wx:if="{{loading && orders.length === 0}}" class="state-card">正在加载任务...</view>
+        <view wx:elif="{{filteredOrders.length === 0}}" class="state-card">当前分类下暂无可接任务</view>
+
+        <block wx:for="{{filteredOrders}}" wx:key="id">
+          <view class="task-card" data-id="{{item.id}}" bindtap="viewOrderDetail">
+            <view class="card-header">
+              <view class="user-info">
+                <view class="avatar">{{item._publisherShort}}</view>
+                <view class="user-details">
+                  <text class="user-name">{{item._publisherName}}</text>
+                  <text class="post-time">{{item._timeText}}</text>
+                </view>
+              </view>
+              <text class="tag {{item._typeClass}}">{{item._typeLabel}}</text>
+            </view>
+
+            <view class="route-card">
+              <view class="route-point route-start"></view>
+              <view class="route-content">
+                <text class="route-label">取件地点</text>
+                <text class="route-value">{{item.stationName || '待补充'}}</text>
+              </view>
+            </view>
+            <view class="route-card">
+              <view class="route-point route-end"></view>
+              <view class="route-content">
+                <text class="route-label">送达地点</text>
+                <text class="route-value">{{item.deliveryLocation || '待补充'}}</text>
+              </view>
+            </view>
+
+            <view class="task-meta">
+              <text wx:if="{{item.pickupTimeRange}}" class="meta-pill">时段 {{item.pickupTimeRange}}</text>
+              <text wx:if="{{item._pickupCodeText}}" class="meta-pill">取件码 {{item._pickupCodeText}}</text>
+            </view>
+
+            <view class="remark-text">{{item._remarkText}}</view>
+
+            <view class="card-footer">
+              <view class="reward-info">
+                <text class="reward-label">报酬</text>
+                <text class="reward-amount">¥{{item._feeText}}</text>
+              </view>
+              <button class="accept-btn" catchtap="grab" data-id="{{item.id}}">立即接单</button>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </scroll-view>
+</view>

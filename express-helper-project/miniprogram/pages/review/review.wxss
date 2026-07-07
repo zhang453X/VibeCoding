@@ -1,0 +1,271 @@
+.page {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.content {
+  padding: 24rpx;
+}
+
+.tab-bar {
+  display: flex;
+  padding: 10rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+}
+
+.tab-item {
+  flex: 1;
+  height: 76rpx;
+  border-radius: 18rpx;
+  color: #6b7280;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-item.active {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+}
+
+.empty-card,
+.review-card {
+  margin-top: 24rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  box-shadow: 0 12rpx 36rpx rgba(15, 23, 42, 0.06);
+}
+
+.empty-card {
+  padding: 100rpx 32rpx;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #9ca3af;
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.review-card {
+  padding: 28rpx;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.order-info {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #111827;
+}
+
+.review-time {
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+.user-row,
+.order-detail {
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  line-height: 1.7;
+  color: #6b7280;
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  margin-top: 22rpx;
+}
+
+.rating-label {
+  font-size: 26rpx;
+  color: #374151;
+}
+
+.star-list {
+  display: flex;
+  align-items: center;
+  margin-left: 18rpx;
+}
+
+.star {
+  margin-right: 8rpx;
+  font-size: 30rpx;
+  color: #d1d5db;
+}
+
+.star.active {
+  color: #f59e0b;
+}
+
+.rating-value {
+  margin-left: 10rpx;
+  font-size: 26rpx;
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.content-box {
+  margin-top: 20rpx;
+  padding: 22rpx 24rpx;
+  border-radius: 20rpx;
+  background: #f8fafc;
+  font-size: 27rpx;
+  line-height: 1.8;
+  color: #374151;
+}
+
+.appeal-row {
+  margin-top: 22rpx;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.appeal-btn {
+  width: 160rpx;
+  height: 68rpx;
+  line-height: 68rpx;
+  border-radius: 999rpx;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.appeal-btn::after {
+  border: none;
+}
+
+.appeal-status {
+  min-width: 150rpx;
+  height: 60rpx;
+  padding: 0 24rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.appeal-status.pending {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+}
+
+.appeal-status.done {
+  background: rgba(34, 197, 94, 0.12);
+  color: #15803d;
+}
+
+.appeal-status.rejected {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+}
+
+.appeal-result {
+  margin-top: 16rpx;
+  font-size: 25rpx;
+  line-height: 1.7;
+  color: #6b7280;
+}
+
+.modal-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(15, 23, 42, 0.42);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+
+.modal-panel {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 28rpx;
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+}
+
+.modal-desc {
+  margin-top: 16rpx;
+  font-size: 25rpx;
+  line-height: 1.7;
+  color: #6b7280;
+  text-align: center;
+}
+
+.appeal-textarea {
+  width: 100%;
+  height: 220rpx;
+  margin-top: 24rpx;
+  padding: 20rpx 22rpx;
+  border-radius: 22rpx;
+  background: #f8fafc;
+  font-size: 27rpx;
+  line-height: 1.7;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+.modal-actions {
+  margin-top: 28rpx;
+  display: flex;
+  gap: 20rpx;
+}
+
+.modal-btn {
+  flex: 1;
+  height: 84rpx;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.modal-btn::after {
+  border: none;
+}
+
+.cancel-btn {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.confirm-btn {
+  background: #2563eb;
+  color: #ffffff;
+}

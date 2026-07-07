@@ -1,0 +1,129 @@
+<view class="page">
+  <scroll-view class="main-content" scroll-y="true">
+    <view class="mode-switch">
+      <view class="mode-tab {{mode === 'published' ? 'active' : ''}}" bindtap="switchMode" data-mode="published">我发布的</view>
+      <view class="mode-tab {{mode === 'grabbed' ? 'active' : ''}}" bindtap="switchMode" data-mode="grabbed">我接单的</view>
+    </view>
+
+    <view class="task-list">
+      <view wx:if="{{sections.length===0}}" class="empty">
+        <text class="empty-title">暂无订单</text>
+        <text class="empty-desc">{{mode === 'published' ? '你还没有发布任何代取需求。' : '你还没有接到任何订单。'}}</text>
+        <button class="empty-btn" bindtap="goToPublishOrder" wx:if="{{mode === 'published'}}">去发布</button>
+        <button class="empty-btn" bindtap="goToHall" wx:else>去看看大厅</button>
+      </view>
+
+      <block wx:for="{{sections}}" wx:key="key" wx:for-item="section">
+        <view class="section-block">
+          <view class="section-title">{{section.title}}</view>
+          <block wx:for="{{section.list}}" wx:key="id" wx:for-item="order">
+            <view class="task-card" bindtap="viewOrderDetail" data-id="{{order.id}}">
+              <view class="card-top">
+                <view class="user-info">
+                  <view class="user-avatar">{{order._partnerShort}}</view>
+                  <view class="user-detail">
+                    <view class="user-name">{{order._partnerName}}</view>
+                    <view class="publish-time">{{order._timeText}}</view>
+                  </view>
+                </view>
+                <text class="status-tag {{order._statusClass}}">{{order._statusLabel}}</text>
+              </view>
+
+              <view class="route-text">{{order._routeText}}</view>
+
+              <view class="meta-row">
+                <text wx:if="{{order.expressCompany}}" class="meta-pill">{{order.expressCompany}}</text>
+                <text wx:if="{{order.pickupCode}}" class="meta-pill">取件码 {{order.pickupCode}}</text>
+                <text wx:if="{{order.pickupTimeRange}}" class="meta-pill">时段 {{order.pickupTimeRange}}</text>
+              </view>
+
+              <view wx:if="{{order.remark}}" class="remark-text">{{order.remark}}</view>
+
+              <view class="card-bottom">
+                <view class="fee-info">
+                  <text class="fee-label">报酬</text>
+                  <text class="fee-text">¥{{order._feeText}}</text>
+                </view>
+                <view class="action-buttons" catchtap="stopPropagation">
+                  <button class="action-btn action-outline" size="mini" bindtap="contactUser" data-phone="{{order.contactPhone}}" wx:if="{{mode === 'grabbed' && order.contactPhone && order.status !== 'COMPLETED'}}">联系发布者</button>
+                  <button class="action-btn action-primary" size="mini" data-id="{{order.id}}" data-status="PICKED_UP" bindtap="updateStatus" wx:if="{{mode === 'published' && order.status === 'GRABBED'}}">确认取件</button>
+                  <button class="action-btn action-primary" size="mini" data-id="{{order.id}}" data-status="COMPLETED" bindtap="updateStatus" wx:if="{{mode === 'published' && (order.status === 'PICKED_UP' || order.status === 'DELIVERING')}}">确认收货</button>
+                  <button class="action-btn action-outline" size="mini" data-id="{{order.id}}" data-status="PICKED_UP" bindtap="updateStatus" wx:if="{{mode === 'grabbed' && order.status === 'GRABBED'}}">确认取件</button>
+                  <button class="action-btn action-primary" size="mini" data-id="{{order.id}}" data-status="DELIVERING" bindtap="updateStatus" wx:if="{{mode === 'grabbed' && order.status === 'PICKED_UP'}}">开始配送</button>
+                  <button class="action-btn action-primary" size="mini" data-id="{{order.id}}" data-status="COMPLETED" bindtap="updateStatus" wx:if="{{mode === 'grabbed' && order.status === 'DELIVERING'}}">确认完成</button>
+                  <button class="action-btn action-outline" size="mini" data-id="{{order.id}}" bindtap="cancelOrder" wx:if="{{mode === 'published' && order.status === 'PENDING_GRAB'}}">取消</button>
+                  <button class="action-btn action-primary" size="mini" data-id="{{order.id}}" bindtap="republishOrder" wx:if="{{mode === 'published' && (order.status === 'CANCELLED' || order.status === 'CANCELED') && !order.republished}}">重新发布</button>
+                  <button class="action-btn action-disabled" size="mini" disabled wx:if="{{mode === 'published' && (order.status === 'CANCELLED' || order.status === 'CANCELED') && order.republished}}">已重新发布</button>
+                  <button class="action-btn action-warn" size="mini" bindtap="showComplaintModal" data-order-id="{{order.id}}" wx:if="{{mode === 'published' && order.status === 'COMPLETED'}}">投诉</button>
+                  <button class="action-btn action-primary" size="mini" bindtap="goToReview" data-order-id="{{order.id}}" wx:if="{{mode === 'published' && order.status === 'COMPLETED' && !order.rated}}">评价</button>
+                  <button class="action-btn action-disabled" size="mini" disabled wx:if="{{mode === 'published' && order.status === 'COMPLETED' && order.rated}}">已评价</button>
+                  <button class="action-btn action-primary" size="mini" data-id="{{order.id}}" bindtap="viewReview" wx:if="{{mode === 'grabbed' && (order.status === 'COMPLETED' || order.status === 'APPEALING') && order.hasReview}}">查看评价</button>
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <view class="rating-modal {{showRatingModal ? 'active' : ''}}" wx:if="{{showRatingModal}}">
+    <view class="modal-mask" bindtap="hideRatingModal"></view>
+    <view class="modal-content">
+      <view class="modal-title">订单评价</view>
+      <view class="rating-stars">
+        <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="star {{rating >= item ? 'active' : ''}}" bindtap="setRating" data-rating="{{item}}">★</text>
+      </view>
+      <textarea placeholder="请输入评价内容" value="{{ratingContent}}" bindinput="onRatingInput" maxlength="200" />
+      <view class="modal-buttons">
+        <button size="mini" bindtap="hideRatingModal">取消</button>
+        <button size="mini" type="primary" bindtap="submitRating" loading="{{ratingLoading}}">提交</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="rating-modal {{showViewReviewModal ? 'active' : ''}}" wx:if="{{showViewReviewModal}}">
+    <view class="modal-mask" bindtap="hideViewReviewModal"></view>
+    <view class="modal-content">
+      <view class="modal-title">评价详情</view>
+      <view class="review-detail" wx:if="{{currentReview}}">
+        <view class="review-rating">
+          <text class="label">评分：</text>
+          <text class="stars">
+            <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="star {{currentReview.rating >= item ? 'active' : ''}}">★</text>
+          </text>
+          <text class="score">{{currentReview.rating}}分</text>
+        </view>
+        <view class="review-content">
+          <text class="label">评价内容：</text>
+          <text class="content">{{currentReview.content || '无评价内容'}}</text>
+        </view>
+        <view class="review-time">
+          <text class="label">评价时间：</text>
+          <text>{{currentReview.createdAt}}</text>
+        </view>
+      </view>
+      <view class="modal-buttons">
+        <button size="mini" bindtap="hideViewReviewModal">关闭</button>
+        <button size="mini" type="warn" bindtap="showAppealModal" wx:if="{{currentReview}}">申诉</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="rating-modal {{showAppealModal ? 'active' : ''}}" wx:if="{{showAppealModal}}">
+    <view class="modal-mask" bindtap="hideAppealModal"></view>
+    <view class="modal-content">
+      <view class="modal-title">{{appealTitle}}</view>
+      <view class="appeal-form">
+        <view class="form-item">
+          <text class="label">{{appealLabel}}</text>
+          <textarea placeholder="{{appealPlaceholder}}" value="{{appealReason}}" bindinput="onAppealInput" maxlength="500" />
+        </view>
+      </view>
+      <view class="modal-buttons">
+        <button size="mini" bindtap="hideAppealModal">取消</button>
+        <button size="mini" type="primary" bindtap="submitAppeal" loading="{{appealLoading}}">{{appealSubmitText}}</button>
+      </view>
+    </view>
+  </view>
+</view>

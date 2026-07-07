@@ -1,0 +1,85 @@
+<view class="page">
+  <view class="status-card">
+    <view class="status-top">
+      <view class="status-title-wrap">
+        <view class="card-title">实名认证</view>
+        <view class="card-subtitle">认证通过后即可开启接单资格</view>
+      </view>
+      <view wx:if="{{statusTheme !== 'approved' && statusTheme !== 'idle'}}" class="status-badge {{statusTheme}}">{{statusText}}</view>
+    </view>
+
+    <view class="status-panel {{statusTheme}}">
+      <view class="status-icon">
+        <image wx:if="{{statusTheme === 'approved'}}" class="status-pass-image" src="../../images/实名认证通过.png" mode="aspectFit"></image>
+        <text wx:elif="{{statusTheme === 'pending'}}">...</text>
+        <text wx:elif="{{statusTheme === 'rejected'}}">!</text>
+        <text wx:else>i</text>
+      </view>
+      <view class="status-content">
+        <view class="status-heading">{{statusText}}</view>
+        <view class="status-desc">{{statusDesc}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{latest.status === 'REJECTED' && latest.rejectReason}}" class="reject-card">
+      <view class="reject-label">驳回原因</view>
+      <view class="reject-reason">{{latest.rejectReason}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{showForm}}" class="form-box">
+    <view class="section-header">
+      <view class="section-title">填写认证信息</view>
+      <view class="section-tip">请确保学号、姓名与证件材料一致</view>
+    </view>
+
+    <view class="form-grid">
+      <view class="form-item">
+        <text class="label">学号</text>
+        <input class="form-input" placeholder="请输入学号" value="{{form.studentNo}}" data-key="studentNo" bindinput="setField" />
+      </view>
+      <view class="form-item">
+        <text class="label">真实姓名</text>
+        <input class="form-input" placeholder="请输入真实姓名" value="{{form.realName}}" data-key="realName" bindinput="setField" />
+      </view>
+    </view>
+
+    <view class="upload-section">
+      <text class="upload-title">身份证正面</text>
+      <view class="upload-area" bindtap="chooseImage" data-type="idCardFront">
+        <image wx:if="{{form.idCardFrontUrl}}" class="preview-img" src="{{form.idCardFrontUrl}}" mode="aspectFill" data-url="{{form.idCardFrontUrl}}" bindtap="previewImage" />
+        <view wx:else class="upload-placeholder">
+          <text class="upload-icon">+</text>
+          <text class="upload-text">点击上传</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="upload-section">
+      <text class="upload-title">身份证反面</text>
+      <view class="upload-area" bindtap="chooseImage" data-type="idCardBack">
+        <image wx:if="{{form.idCardBackUrl}}" class="preview-img" src="{{form.idCardBackUrl}}" mode="aspectFill" data-url="{{form.idCardBackUrl}}" bindtap="previewImage" />
+        <view wx:else class="upload-placeholder">
+          <text class="upload-icon">+</text>
+          <text class="upload-text">点击上传</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="upload-section">
+      <text class="upload-title">身份证正面 + 校园卡正面合拍</text>
+      <view class="upload-area" bindtap="chooseImage" data-type="idCardWithStudentCard">
+        <image wx:if="{{form.idCardWithStudentCardUrl}}" class="preview-img" src="{{form.idCardWithStudentCardUrl}}" mode="aspectFill" data-url="{{form.idCardWithStudentCardUrl}}" bindtap="previewImage" />
+        <view wx:else class="upload-placeholder">
+          <text class="upload-icon">+</text>
+          <text class="upload-text">点击上传</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="submit-note">提交后将进入人工审核，审核期间无需重复提交。</view>
+    <button class="submit-btn" bindtap="submit" loading="{{submitting}}" disabled="{{submitting}}">提交认证</button>
+  </view>
+
+  <button bindtap="refreshStatus" wx:if="{{latest.status === 'PENDING'}}" class="refresh-btn">刷新审核状态</button>
+</view>

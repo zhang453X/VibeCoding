@@ -1,0 +1,27 @@
+<view class="page">
+  <view class="content">
+    <view class="form-item">
+      <view class="label">收货人</view>
+      <input class="input" placeholder="请输入收货人姓名" value="{{form.name}}" bindinput="onInputChange" data-field="name" />
+    </view>
+
+    <view class="form-item">
+      <view class="label">联系电话</view>
+      <input class="input" type="number" placeholder="请输入联系电话" value="{{form.phone}}" bindinput="onInputChange" data-field="phone" maxlength="11" />
+    </view>
+
+    <view class="form-item">
+      <view class="label">详细地址</view>
+      <textarea class="textarea" placeholder="请输入详细地址" value="{{form.address}}" bindinput="onInputChange" data-field="address" maxlength="200" />
+    </view>
+
+    <view class="form-item switch-item">
+      <view class="label">设为默认地址</view>
+      <switch checked="{{form.isDefault}}" bindchange="onSwitchChange" color="#3B82F6" />
+    </view>
+  </view>
+  
+  <view class="bottom-bar">
+    <button class="save-btn" bindtap="saveAddress">保存</button>
+  </view>
+</view>
