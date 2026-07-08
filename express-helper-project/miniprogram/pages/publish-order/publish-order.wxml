@@ -1,0 +1,176 @@
+<view class="page">
+  <scroll-view class="main-content" scroll-y="true">
+    <view class="form-container">
+      <view class="page-intro">
+        <text class="intro-title">发布代取需求</text>
+        <text class="intro-desc">按示例页的简洁流程填写信息，提交后任务会进入校园大厅。</text>
+      </view>
+
+      <view class="form-section">
+        <view class="section-title">快递类型</view>
+        <view class="type-grid">
+          <block wx:for="{{expressTypes}}" wx:key="*this">
+            <view class="type-item {{expressTypeIndex === index ? 'active' : ''}}" bindtap="chooseType" data-index="{{index}}">
+              <text class="type-icon">{{index === 0 ? '包' : (index === 1 ? '鲜' : (index === 2 ? '件' : '大'))}}</text>
+              <text class="type-name">{{item}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <view class="form-section">
+        <view class="section-title">取送信息</view>
+
+        <view class="form-card">
+          <text class="form-label">快递站点</text>
+          <picker
+            mode="selector"
+            range="{{stationOptions}}"
+            range-key="stationName"
+            value="{{stationIndex >= 0 ? stationIndex : 0}}"
+            disabled="{{stationLoading || stationOptions.length === 0}}"
+            bindchange="chooseStation"
+          >
+            <view class="station-picker {{form.stationName ? 'selected' : ''}} {{stationLoading ? 'loading' : ''}}">
+              <view class="station-picker-main">
+                <image class="station-picker-icon-image" src="/images/快递站点.png" mode="aspectFit" />
+                <view class="station-picker-texts">
+                  <view class="station-picker-top">
+                    <text class="station-picker-title">
+                      {{stationLoading ? '快递点加载中...' : (form.stationName || (stationOptions.length ? '请选择快递站点' : '暂无可选快递点'))}}
+                    </text>
+                    <text wx:if="{{selectedStation && selectedStation.campusArea}}" class="station-picker-tag">{{selectedStation.campusArea}}</text>
+                  </view>
+                  <text class="station-picker-desc">
+                    {{selectedStation ? (selectedStation.detailAddress || '已选择校园快递点') : '点击展开下拉框，选择一个可用快递站点'}}
+                  </text>
+                </view>
+              </view>
+              <view class="station-picker-arrow-wrap">
+                <text class="station-picker-arrow">></text>
+              </view>
+            </view>
+          </picker>
+        </view>
+
+        <view class="form-card">
+          <text class="form-label">送达位置</text>
+          <view class="location-input-wrapper">
+            <input class="form-input" placeholder="请输入送达位置（宿舍/教学楼）" data-key="deliveryLocation" bindinput="setField" value="{{form.deliveryLocation}}" />
+            <view class="address-book-btn" bindtap="chooseFromAddressBook">
+              <text class="address-icon">簿</text>
+              <text class="address-text">地址簿</text>
+            </view>
+          </view>
+          <view class="quick-list">
+            <block wx:for="{{commonLocations}}" wx:key="*this">
+              <text class="quick-chip {{form.deliveryLocation === item ? 'active' : ''}}" data-value="{{item}}" bindtap="chooseQuickLocation">{{item}}</text>
+            </block>
+          </view>
+        </view>
+
+        <view class="time-row">
+          <view class="time-item">
+            <text class="form-label">开始时间</text>
+            <picker mode="time" value="{{startTime}}" bindchange="setStartTime">
+              <view class="time-picker">
+                <text>{{startTime}}</text>
+                <text class="picker-arrow">></text>
+              </view>
+            </picker>
+          </view>
+          <view class="time-item">
+            <text class="form-label">结束时间</text>
+            <picker mode="time" value="{{endTime}}" bindchange="setEndTime">
+              <view class="time-picker">
+                <text>{{endTime}}</text>
+                <text class="picker-arrow">></text>
+              </view>
+            </picker>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-section">
+        <view class="section-title">快递信息</view>
+
+        <view class="form-card">
+          <text class="form-label">快递公司</text>
+          <input class="form-input" placeholder="请输入快递公司（如 顺丰）" data-key="expressCompany" bindinput="setField" value="{{form.expressCompany}}" />
+        </view>
+
+        <view class="double-row">
+          <view class="form-card half-card">
+            <text class="form-label">快递单号</text>
+            <input class="form-input" placeholder="请输入快递单号" data-key="expressNo" bindinput="setField" value="{{form.expressNo}}" />
+          </view>
+          <view class="form-card half-card">
+            <text class="form-label">取件码</text>
+            <input class="form-input" placeholder="请输入取件码" data-key="pickupCode" bindinput="setField" value="{{form.pickupCode}}" />
+          </view>
+        </view>
+
+        <view class="form-card">
+          <text class="form-label">联系方式</text>
+          <input class="form-input" placeholder="请输入联系方式（手机号）" type="number" data-key="contactPhone" bindinput="setField" value="{{form.contactPhone}}" />
+        </view>
+      </view>
+
+      <view class="form-section">
+        <view class="section-title">报酬设置</view>
+
+        <view class="reward-card">
+          <view class="reward-input">
+            <text class="currency">¥</text>
+            <input class="reward-field" placeholder="请输入报酬金额" type="digit" data-key="fee" bindinput="setField" value="{{form.fee}}" />
+          </view>
+          <view class="reward-quick-list">
+            <block wx:for="{{quickFees}}" wx:key="*this">
+              <text class="reward-chip {{form.fee == item ? 'active' : ''}}" data-value="{{item}}" bindtap="setQuickFee">{{item}}元</text>
+            </block>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-section">
+        <view class="section-title">备注信息</view>
+
+        <view class="form-card">
+          <textarea class="form-textarea" placeholder="请输入备注信息（选填）" data-key="remark" bindinput="setField" maxlength="200" value="{{form.remark}}" />
+        </view>
+      </view>
+
+      <view class="submit-section">
+        <button class="submit-btn" type="primary" bindtap="submit">发布需求</button>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="address-modal {{showAddressModal ? 'active' : ''}}" wx:if="{{showAddressModal}}">
+    <view class="modal-mask" bindtap="hideAddressModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <view class="modal-title">选择地址</view>
+        <view class="modal-close" bindtap="hideAddressModal">✕</view>
+      </view>
+      <view class="address-list">
+        <view wx:if="{{addressList.length === 0}}" class="empty-address">
+          <text>暂无地址，快去添加吧！</text>
+        </view>
+        <block wx:for="{{addressList}}" wx:key="id">
+          <view class="address-item" bindtap="selectAddress" data-index="{{index}}">
+            <view class="address-name-phone">
+              <text class="name">{{item.name}}</text>
+              <text class="phone">{{item.phone}}</text>
+            </view>
+            <view class="address-detail">{{item.address}}</view>
+            <view wx:if="{{item.isDefault}}" class="default-tag">默认</view>
+          </view>
+        </block>
+      </view>
+      <view class="modal-footer">
+        <button class="add-address-btn" bindtap="goToAddAddress">+ 新增地址</button>
+      </view>
+    </view>
+  </view>
+</view>

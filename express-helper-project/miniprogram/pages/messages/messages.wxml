@@ -1,0 +1,84 @@
+<view class="page">
+  <view class="header">
+    <view class="header-safe" style="height: {{statusBarHeight}}px;"></view>
+    <view class="header-main">
+      <view class="title-block">
+        <text class="title">消息中心</text>
+        <text class="subtitle">{{batchMode ? '已进入批量管理模式' : '查看订单提醒与系统通知'}}</text>
+      </view>
+      <view class="header-status" wx:if="{{list.length}}">{{list.length}} 条</view>
+    </view>
+    <view class="toolbar">
+      <view class="toolbar-btn" bindtap="readAll" wx:if="{{!batchMode}}">全部已读</view>
+      <view class="toolbar-btn primary" bindtap="toggleBatchMode" wx:if="{{!batchMode}}">批量管理</view>
+      <view class="toolbar-btn" bindtap="toggleSelectAll" wx:if="{{batchMode && !isAllSelected}}">全选</view>
+      <view class="toolbar-btn" bindtap="toggleSelectAll" wx:if="{{batchMode && isAllSelected}}">取消全选</view>
+      <view class="toolbar-btn" bindtap="cancelBatch" wx:if="{{batchMode}}">退出批量</view>
+      <view class="toolbar-btn danger" bindtap="deleteSelected" wx:if="{{batchMode}}">删除选中</view>
+    </view>
+  </view>
+
+  <scroll-view class="main-content" scroll-y="true">
+    <view wx:if="{{list.length===0}}" class="empty">
+      <text class="empty-icon">📭</text>
+      <text class="empty-text">暂无消息</text>
+    </view>
+    
+    <view class="message-list">
+      <view class="message-item" wx:for="{{list}}" wx:key="id">
+        <view class="message-wrapper" style="width: {{wrapperWidth}}px;">
+          <view class="message-track" style="transform: translateX({{item.x || 0}}px); width: {{trackWidth}}px;">
+            <view class="message-main" style="width: {{wrapperWidth}}px;">
+              <view class="card {{item.readFlag === 0 ? 'unread' : ''}} {{selectedIds.includes(item.id) ? 'selected' : ''}}">
+                <view class="checkbox" wx:if="{{batchMode}}" bindtap="toggleSelect" data-id="{{item.id}}">
+                  <view class="checkbox-inner {{selectedIds.includes(item.id) ? 'checked' : ''}}">
+                    <text wx:if="{{selectedIds.includes(item.id)}}">✓</text>
+                  </view>
+                </view>
+                <view class="card-content" bindtouchstart="onTouchStart" bindtouchmove="onTouchMove" bindtouchend="onTouchEnd" data-id="{{item.id}}" bindtap="goToOrderDetail" data-order-id="{{item.orderId}}" wx:if="{{item.orderId}}">
+                  <view class="card-top">
+                    <view class="card-title-row">
+                      <view class="card-title">
+                        <text>{{item.title}}</text>
+                        <view class="dot" wx:if="{{item.readFlag===0}}"></view>
+                      </view>
+                      <text class="card-time">{{item.formattedTime || ''}}</text>
+                    </view>
+                    <view class="card-meta-row">
+                      <text class="notice-type">{{item.noticeType}}</text>
+                      <text class="order-tag">订单号 {{item.orderId}}</text>
+                    </view>
+                  </view>
+                  <view class="card-body">
+                    <view class="content">{{item.content}}</view>
+                  </view>
+                </view>
+                <view class="card-content" bindtouchstart="onTouchStart" bindtouchmove="onTouchMove" bindtouchend="onTouchEnd" data-id="{{item.id}}" wx:else>
+                  <view class="card-top">
+                    <view class="card-title-row">
+                      <view class="card-title">
+                        <text>{{item.title}}</text>
+                        <view class="dot" wx:if="{{item.readFlag===0}}"></view>
+                      </view>
+                      <text class="card-time">{{item.formattedTime || ''}}</text>
+                    </view>
+                    <view class="card-meta-row">
+                      <text class="notice-type">{{item.noticeType}}</text>
+                    </view>
+                  </view>
+                  <view class="card-body">
+                    <view class="content">{{item.content}}</view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="slide-actions" style="width: {{slideActionWidth}}px;">
+              <view class="slide-btn unread-btn {{item.readFlag===0 ? 'disabled' : ''}}" data-id="{{item.id}}" data-read-flag="{{item.readFlag}}" catchtap="unreadOne">标记未读</view>
+              <view class="slide-btn delete-btn" data-id="{{item.id}}" catchtap="deleteOne">删除</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

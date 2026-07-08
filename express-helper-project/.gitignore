@@ -1,0 +1,56 @@
+# ========== 构建产物 ==========
+# 后端 Maven 构建
+backend/target/
+backend/*.iml
+# 前端 Vite 构建
+admin-web/dist/
+admin-web/.npm-cache/
+
+# ========== 依赖目录 ==========
+admin-web/node_modules/
+
+# ========== IDE / 编辑器 ==========
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+*.swp
+*.swo
+*~
+
+# ========== 系统文件 ==========
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ========== 日志 ==========
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ========== 临时上传文件 ==========
+# 开发期的本地上传文件（头像、认证图）不进仓库；如要保留空目录可自行删除本行并加 .keep 文件
+backend/uploads/
+
+# ========== 环境变量 / 配置覆盖 ==========
+.env
+.env.local
+.env.*.local
+application-local.yml
+application-prod.yml
+backend/src/main/resources/application-local.yml
+backend/src/main/resources/application-prod.yml
+miniprogram/project.private.config.json
+
+# ========== 小程序开发者工具缓存 ==========
+miniprogram/.cache/
+miniprogram/miniprogram_npm/

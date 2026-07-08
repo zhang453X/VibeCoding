@@ -1,0 +1,62 @@
+<view class="page">
+  <view class="content">
+    <view class="faq-list">
+      <view class="faq-item" wx:for="{{faqList}}" wx:key="id" bindtap="toggleFaq" data-index="{{index}}">
+        <view class="faq-question">
+          <text class="question-text">{{item.question}}</text>
+          <text class="arrow {{item.open ? 'open' : ''}}">▼</text>
+        </view>
+        <view class="faq-answer {{item.open ? 'open' : ''}}">
+          <text>{{item.answer}}</text>
+        </view>
+      </view>
+    </view>
+
+    <button class="feedback-btn" bindtap="openFeedbackDialog">
+      <text>我要反馈</text>
+    </button>
+  </view>
+
+  <view wx:if="{{feedbackDialogVisible}}" class="dialog-layer">
+    <view class="dialog-mask" bindtap="closeFeedbackDialog"></view>
+    <view class="dialog-card">
+      <view class="dialog-header">
+        <view class="dialog-title">提交反馈</view>
+        <view class="dialog-close" bindtap="closeFeedbackDialog">×</view>
+      </view>
+
+      <view class="dialog-section">
+        <view class="field-label">反馈类型</view>
+        <picker
+          class="type-picker"
+          mode="selector"
+          range="{{feedbackTypeOptions}}"
+          range-key="label"
+          value="{{feedbackTypeIndex}}"
+          bindchange="handleFeedbackTypeChange"
+        >
+          <view class="picker-display">
+            <text class="picker-text">{{feedbackTypeLabel}}</text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="dialog-section">
+        <view class="field-label">反馈内容</view>
+        <textarea
+          class="feedback-textarea"
+          placeholder="请详细描述你遇到的问题或建议，便于管理员尽快处理"
+          maxlength="500"
+          value="{{feedbackForm.content}}"
+          bindinput="setFeedbackContent"
+        ></textarea>
+        <view class="word-count">{{feedbackForm.content.length}}/500</view>
+      </view>
+
+      <button class="submit-btn" bindtap="submitFeedback" loading="{{submitting}}" disabled="{{submitting}}">
+        <text>提交反馈</text>
+      </button>
+    </view>
+  </view>
+</view>

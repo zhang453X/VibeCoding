@@ -1,0 +1,197 @@
+<view class="page">
+  <scroll-view class="main-content" scroll-y="{{!showAiDialog}}" enable-flex="{{true}}">
+    <view class="profile-header">
+      <view class="profile-info">
+        <image class="avatar" src="{{profile.avatar || 'https://img.icons8.com/color/200/user-male-circle.png'}}" mode="aspectFill" bindtap="chooseAvatar" />
+        <view class="user-detail">
+          <view class="user-name">{{profile.nickname || '校园同学'}}</view>
+          <view class="user-id">学号：{{profile.studentNo || '未完善'}}</view>
+          <view class="courier-status {{profile.courierEnabled === 1 ? 'enabled' : 'disabled'}}">{{profile.courierEnabled === 1 ? '已开通接单' : '未开通接单'}}</view>
+          <view class="user-stats">
+            <view class="stat-item">
+              <view class="stat-value">{{stats.publishCount}}</view>
+              <view class="stat-label">发布</view>
+            </view>
+            <view class="stat-item">
+              <view class="stat-value">{{stats.grabCount}}</view>
+              <view class="stat-label">接单</view>
+            </view>
+            <view class="stat-item">
+              <view class="stat-value">{{stats.creditScore}}</view>
+              <view class="stat-label">信用</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="profile-content">
+      <view class="card balance-card mb-4">
+        <view class="card-row">
+          <view>
+            <view class="card-title">当前信用分</view>
+            <view class="balance">{{profile.creditScore || 0}}</view>
+            <view class="balance-desc">实名、履约、评价都会影响信用分表现</view>
+          </view>
+          <view class="btn btn-primary btn-sm" bindtap="goToCreditRecord" data-type="credit">
+            <text>查看明细</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="card mb-4 overflow-hidden">
+        <view class="menu-item" bindtap="goToAuth">
+          <view class="menu-item-left">
+            <view class="menu-icon">
+              <image class="menu-icon-image" src="../../images/实名认证.png" mode="aspectFit"></image>
+            </view>
+            <text class="menu-text">实名认证</text>
+          </view>
+          <view class="menu-item-right">
+            <text class="auth-status auth-{{authInfo.status || 'UNAUTH'}}">{{authText}}</text>
+            <text class="menu-arrow">></text>
+          </view>
+        </view>
+        <view class="menu-item" bindtap="goToAddressBook">
+          <view class="menu-item-left">
+            <view class="menu-icon">
+              <image class="menu-icon-image" src="../../images/收货地址.png" mode="aspectFit"></image>
+            </view>
+            <text class="menu-text">收货地址</text>
+          </view>
+          <text class="menu-arrow">></text>
+        </view>
+        <view class="menu-item" bindtap="goToMyReviews">
+          <view class="menu-item-left">
+            <view class="menu-icon">
+              <image class="menu-icon-image" src="../../images/我的评价.png" mode="aspectFit"></image>
+            </view>
+            <text class="menu-text">我的评价</text>
+          </view>
+          <text class="menu-arrow">></text>
+        </view>
+        <view class="menu-item" bindtap="goToCreditRecord" data-type="credit">
+          <view class="menu-item-left">
+            <view class="menu-icon">
+              <image class="menu-icon-image" src="../../images/信用积分.png" mode="aspectFit"></image>
+            </view>
+            <text class="menu-text">信用积分</text>
+          </view>
+          <view class="menu-item-right">
+            <text class="score-value">{{profile.creditScore || 0}}</text>
+            <text class="menu-arrow">></text>
+          </view>
+        </view>
+      </view>
+
+      <view class="card overflow-hidden">
+        <view class="menu-item" bindtap="goToEdit">
+          <view class="menu-item-left">
+            <view class="menu-icon">
+              <image class="menu-icon-image" src="../../images/个人信息 .png" mode="aspectFit"></image>
+            </view>
+            <text class="menu-text">个人信息</text>
+          </view>
+          <text class="menu-arrow">></text>
+        </view>
+        <view class="menu-item" bindtap="goToChangePassword">
+          <view class="menu-item-left">
+            <view class="menu-icon">
+              <image class="menu-icon-image" src="../../images/修改密码.png" mode="aspectFit"></image>
+            </view>
+            <text class="menu-text">修改密码</text>
+          </view>
+          <text class="menu-arrow">></text>
+        </view>
+        <view class="menu-item" bindtap="goToHelp">
+          <view class="menu-item-left">
+            <view class="menu-icon">
+              <image class="menu-icon-image" src="../../images/帮助与反馈.png" mode="aspectFit"></image>
+            </view>
+            <text class="menu-text">帮助与反馈</text>
+          </view>
+          <text class="menu-arrow">></text>
+        </view>
+        <view class="menu-item" bindtap="goToAbout">
+          <view class="menu-item-left">
+            <view class="menu-icon">
+              <image class="menu-icon-image" src="../../images/关于我们.png" mode="aspectFit"></image>
+            </view>
+            <text class="menu-text">关于我们</text>
+          </view>
+          <text class="menu-arrow">></text>
+        </view>
+      </view>
+
+      <view class="logout-section">
+        <button class="logout-btn" bindtap="logout">
+          <text>退出登录</text>
+        </button>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="ai-float-btn" bindtap="openAiDialog">
+    <image class="ai-float-icon" src="../../images/客服.png" mode="aspectFit"></image>
+  </view>
+
+  <view wx:if="{{showAiDialog}}" class="ai-dialog-layer">
+    <view class="ai-dialog-mask" bindtap="closeAiDialog"></view>
+    <view class="ai-dialog">
+      <view class="ai-dialog-header">
+        <view class="ai-dialog-title-wrap">
+          <text class="ai-dialog-title">AI客服</text>
+          <text class="ai-dialog-subtitle">咨询抢单、下单、评价、申诉、实名认证等问题</text>
+        </view>
+        <text class="ai-dialog-close" bindtap="closeAiDialog">×</text>
+      </view>
+
+      <scroll-view
+        class="ai-message-list"
+        scroll-y="{{true}}"
+        scroll-into-view="{{aiScrollIntoView}}"
+        show-scrollbar="{{false}}"
+        enhanced="{{true}}"
+        enable-flex="{{true}}"
+      >
+        <block wx:for="{{aiMessages}}" wx:key="id">
+          <view id="{{item.id}}" class="ai-message-row {{item.role === 'user' ? 'user' : 'assistant'}}">
+            <view class="ai-message-bubble {{item.role === 'user' ? 'user' : 'assistant'}}">
+              <text>{{item.content}}</text>
+            </view>
+          </view>
+        </block>
+        <view wx:if="{{aiLoading}}" id="ai-loading-row" class="ai-message-row assistant">
+          <view class="ai-message-bubble assistant ai-loading-bubble">
+            <text>AI客服正在思考...</text>
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="ai-dialog-footer">
+        <view class="ai-quick-questions">
+          <block wx:for="{{aiQuickQuestions}}" wx:key="*this">
+            <view class="ai-quick-chip" data-text="{{item}}" bindtap="useAiQuickQuestion">{{item}}</view>
+          </block>
+        </view>
+
+        <view class="ai-input-bar">
+          <input
+            class="ai-input"
+            placeholder="输入你想咨询的问题"
+            maxlength="300"
+            confirm-type="send"
+            bindconfirm="sendAiMessage"
+            bindinput="onAiInput"
+            value="{{aiInput}}"
+            cursor-spacing="24"
+          />
+          <view class="ai-send-btn {{aiLoading ? 'disabled' : ''}}" bindtap="sendAiMessage">
+            <text wx:if="{{aiLoading}}" class="ai-send-btn-text">...</text>
+            <image wx:else class="ai-send-btn-icon" src="../../images/发送信息.png" mode="aspectFit"></image>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

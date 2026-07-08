@@ -1,0 +1,45 @@
+<view class="page">
+  <view wx:if="{{station}}" class="detail-card">
+    <text class="station-name">{{station.stationName}}</text>
+    <text wx:if="{{station.campusArea}}" class="station-area">{{station.campusArea}}</text>
+    <text class="station-address">{{station.detailAddress}}</text>
+
+    <view class="meta-list">
+      <view wx:if="{{station.contactName}}" class="meta-row">
+        <text class="meta-label">联系人</text>
+        <text class="meta-value">{{station.contactName}}</text>
+      </view>
+      <view wx:if="{{station.contactPhone}}" class="meta-row">
+        <text class="meta-label">联系电话</text>
+        <text class="meta-value">{{station.contactPhone}}</text>
+      </view>
+      <view wx:if="{{station.serviceTime}}" class="meta-row">
+        <text class="meta-label">营业时间</text>
+        <text class="meta-value">{{station.serviceTime}}</text>
+      </view>
+      <view class="meta-row">
+        <text class="meta-label">经纬度</text>
+        <text class="meta-value">{{station.longitude}}, {{station.latitude}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{mapPreviewUrl}}" class="map-card">
+    <text class="section-title">高德地图预览</text>
+    <image class="map-image" src="{{mapPreviewUrl}}" mode="aspectFill"></image>
+  </view>
+
+  <view wx:elif="{{station}}" class="map-card">
+    <text class="section-title">地图预览</text>
+    <text class="map-tip">{{amapConfigured ? '暂未获取到地图预览' : '请先在管理员端系统参数中配置 AMAP_WEB_KEY'}}</text>
+  </view>
+
+  <view wx:if="{{station}}" class="action-row">
+    <button class="action-btn primary" bindtap="openLocation">
+      <text>打开位置</text>
+    </button>
+    <button class="action-btn" bindtap="copyAddress">
+      <text>复制地址</text>
+    </button>
+  </view>
+</view>

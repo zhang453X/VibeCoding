@@ -1,0 +1,41 @@
+<view class="page">
+  <image class="page-bg" src="/images/登录.jpg" mode="aspectFill" />
+
+  <view class="content">
+    <view class="panel">
+      <view class="section-title">欢迎登录</view>
+      <view class="section-desc"></view>
+
+      <view class="field-card">
+        <input
+          class="field-input"
+          placeholder="请输入用户名或学号"
+          placeholder-class="field-placeholder"
+          value="{{username}}"
+          bindinput="onUsername"
+          confirm-type="next"
+        />
+      </view>
+
+      <view class="field-card">
+        <input
+          class="field-input"
+          placeholder="请输入密码"
+          placeholder-class="field-placeholder"
+          password
+          value="{{password}}"
+          bindinput="onPassword"
+          confirm-type="send"
+          bindconfirm="submit"
+        />
+      </view>
+
+      <button class="primary-btn" loading="{{loading}}" disabled="{{loading}}" bindtap="submit">登录</button>
+
+      <view class="bottom-bar">
+        <text class="bottom-text">还没有账号？</text>
+        <text class="bottom-link" bindtap="toRegister">立即注册</text>
+      </view>
+    </view>
+  </view>
+</view>

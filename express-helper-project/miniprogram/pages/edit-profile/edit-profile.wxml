@@ -1,0 +1,27 @@
+<view class="page">
+  <scroll-view class="content" scroll-y="true">
+    <view class="card">
+      <view class="form-item">
+        <text class="label">昵称</text>
+        <input placeholder="请输入昵称" value="{{form.nickname}}" data-key="nickname" bindinput="setField" />
+      </view>
+      <view class="form-item">
+        <text class="label">学号</text>
+        <input placeholder="请输入学号" value="{{form.studentNo}}" data-key="studentNo" bindinput="setField" disabled="{{true}}" />
+      </view>
+      <view class="form-item">
+        <text class="label">手机号</text>
+        <input placeholder="请输入手机号" value="{{form.phone}}" data-key="phone" bindinput="setField" maxlength="11" />
+      </view>
+      <view class="form-item">
+        <text class="label">宿舍地址</text>
+        <input placeholder="请输入宿舍地址" value="{{form.dormitory}}" data-key="dormitory" bindinput="setField" />
+      </view>
+      <view class="form-item">
+        <text class="label">学院</text>
+        <input placeholder="请输入学院" value="{{form.college}}" data-key="college" bindinput="setField" />
+      </view>
+      <button class="save-btn" bindtap="saveProfile" loading="{{saving}}">保存</button>
+    </view>
+  </scroll-view>
+</view>
